@@ -160,7 +160,7 @@ def main_local(test=False, use_imputed=True, no_validation=False,test_export=Fal
 
     data_use, future_games = get_target_data(test)
 
-    todays_date_table = pd.DataFrame(columns=['Date Last Run'],data=[[date.today()]]) # add today date.
+    todays_date_table = pd.DataFrame(columns=['date','time'],data=[[date.today(),datetime.now().strftime('%H:%M')]]) # add today date.
     S = SQLHandler()
 
     if len(future_games) == 0:

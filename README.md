@@ -16,3 +16,18 @@ predictions are then written to a database and displayed on my [personal website
 # Notebooks
 * [`strike_zone_models.ipynb`](https://github.com/TimCSheehan/pitcher_model_deploy/blob/main/publicNotebooks/strike_zone_models.ipynb) demonstrates that various types of models we can fit to subsets of pitch data.
 * [`xgboost_BayesOptimization.ipynb`](https://github.com/TimCSheehan/pitcher_model_deploy/blob/main/publicNotebooks/xgboost_BayesOptimization.ipynb) visualizes the feature selection and meta-parameter selection for our model predictions.
+
+# Visualizations
+
+## Example Strike Zones
+
+<p align="center">
+<img src="figs/ex_batter.png" alt="example strike zone" width="600"/>
+</p>
+
+
+## P(Strike | count, call_history)
+
+<p align="center">
+<img src="figs/history_only.png" alt="examples of history bias" width="600"/>
+</p>

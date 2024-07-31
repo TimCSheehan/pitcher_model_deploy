@@ -47,7 +47,12 @@ m=-.11
 pred_num_at_bat = b+m*xx
 
 def get_data_root():
-    return './data/'
+    # to work from both root and notebook folder
+    base_root = './data/'
+    if ~os.path.exists(base_root):
+        base_root = '.' + base_root
+        assert os.path.exists(base_root), f'Data Path Not Found "{base_root}"'
+    return base_root
 
 class ScheduleETL:
     def __init__(self, replace=False):
@@ -92,7 +97,9 @@ class ScheduleETL:
         print(f'Saved to {self.save_name_schedule(season)}!')
         self.etl_merge_previous_season_stats(season,True) # save updated schedule
 
-        upcoming_games = new_schedule.query('status != "Final"')
+        # yesterday_ts = pd.to_datetime('today').floor('D') + timedelta(days=-1)
+        upcoming_games = new_schedule.query('status != "Final" ')  # & date_time.dt.tz_convert(None) >=@yesterday_ts'
+
         if len(upcoming_games) == 0:
             # no games today
             #- SAVE EMPTY TABLE

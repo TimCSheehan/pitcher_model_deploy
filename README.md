@@ -2,7 +2,7 @@
 
 This repository contains a script that is deployed as a Google Cloud Function and is currently scheduled to run daily (at 7AM). The entrypoint [`main.py`](https://github.com/TimCSheehan/pitcher_model_deploy/blob/main/main.py) triggers a sequence to get the current
 days schedule and run a predictive model to predict the number of strike outs and walks thrown in each game by the starting pitcher. The model
-predictions are then written to a database and displayed on my [personal website](timothysheehan.com/mlb_vis).
+predictions are then written to a database and displayed on my [personal website](https://timothysheehan.com/mlb_vis).
 
 # Files
 * [`exports.py`](https://github.com/TimCSheehan/pitcher_model_deploy/blob/main/exports.py) handles writing to the database and is also equipped to send a summary email upon model completion (currently deactivated).

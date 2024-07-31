@@ -11,4 +11,8 @@ predictions are then written to a database and displayed on my [personal website
   Relevent data is stored in a highly compressed format in the `/data` directory.
 * [`main.py`](https://github.com/TimCSheehan/pitcher_model_deploy/blob/main/main.py) calls ETL pipeline and trains model on most up to data data to make predictions for todays game.
   Current best performing model is an implementation of Gradient Boosting Trees ([`xgboost`](https://xgboost.readthedocs.io/en/stable/)). To get an accurate estimate of model error,
-  the model is first run holding out the previous two weeks of data and MSE is saved to a table before training on all past data to generate predictions. 
+  the model is first run holding out the previous two weeks of data and MSE is saved to a table before training on all past data to generate predictions.
+  
+# Notebooks
+* [`strike_zone_models.ipynb`](https://github.com/TimCSheehan/pitcher_model_deploy/blob/main/publicNotebooks/strike_zone_models.ipynb) demonstrates that various types of models we can fit to subsets of pitch data.
+* [`xgboost_BayesOptimization.ipynb`](https://github.com/TimCSheehan/pitcher_model_deploy/blob/main/publicNotebooks/xgboost_BayesOptimization.ipynb) visualizes the feature selection and meta-parameter selection for our model predictions.

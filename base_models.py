@@ -71,6 +71,11 @@ dict_params = {'walls_single': ['Left_Wall', 'Right_Wall', 'Bottom_Wall', 'Top_W
 # TODO: don't like how sz takes list of rows and logistic model takes columns of data. They should look similar
 
 class ProbStrike:
+    """
+    Defines a model for predicting the probability of a strike given a pitch location.
+    Includes varients for logistic regression and joint models. Model keeps track of parameters
+    and column names of data. Coefficient estimation achieved with ModelFitting class.
+    """
 
     def __init__(self, model_type='strike_zone', params=None, n_sd=4, param_names=None,
                  mod_wall_relu=None, sz_bt=False, batter_lr=False):
@@ -312,6 +317,10 @@ class ProbStrike:
 
 
 class ModelFitting:
+    """
+    Designed to fit a model defined by ProbStrike class. Can fit a single model or perform cross-validation.
+    Returns many metrics including bits gained and F1-score.
+    """
     def __init__(self, model, data, scale_coef=None, verbose=True, **kwargs):
         self.labeled_coef = None
         self.opts = {'maxiter': 200}
@@ -414,6 +423,9 @@ class ModelFitting:
 
 
 class Visualization:
+    """
+    Helper class for visualizing fit models including strike zone and history features.
+    """
     def __init__(self):
         pass
 

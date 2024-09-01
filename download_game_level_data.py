@@ -40,7 +40,7 @@ team_dict_map = {
     'Toronto Blue Jays': "TOR",
     'Washington Nationals': "WSN"}
 
-## hardcoded estimated # of at bats (from 2023 data)
+## hardcoded estimated # of at bats (from 2023 data) based on position in batting order
 xx = np.arange(9)
 b=2.6
 m=-.11
@@ -49,12 +49,20 @@ pred_num_at_bat = b+m*xx
 def get_data_root():
     # to work from both root and notebook folder
     base_root = './data/'
-    if ~os.path.exists(base_root):
+    print(os.listdir('.'))
+    if False == os.path.exists(base_root):
         base_root = '.' + base_root
         assert os.path.exists(base_root), f'Data Path Not Found "{base_root}"'
     return base_root
 
 class ScheduleETL:
+    """
+    A class to handle the ETL process for the MLB schedule data.
+
+    Includes mthods to download *game* level data using both pybaseball and the statsapi packages.
+    Includes methods to merge in umpire information and box score.
+    Final dataset can be "shrunk" to reduce memory usage.
+    """
     def __init__(self, replace=False):
         self.loc_schedule = get_data_root() + 'schedule_v1'
         self.loc_merged_schedule = get_data_root() + 'merged_schedule_v1'
@@ -475,6 +483,9 @@ class ScheduleETL:
 
 
 class DataLoaderGame(ScheduleETL):
+    """
+    A Subclass of ScheduleETL that includes methods to import the merged data and the upcoming games.
+    """
     def __init__(self):
         super().__init__()
         self.data = None

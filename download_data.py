@@ -61,26 +61,38 @@ def shuffle_within_group(data, grouping_var, vars_want=None, dict_based=False):
     else:
         return data.loc[shuffled_inds]
 
-
 def get_data_root():
     # to work from both root and notebook folder
     base_root = './data/'
-    if ~os.path.exists(base_root):
+    if not os.path.exists(base_root):
         base_root = '.' + base_root
         assert os.path.exists(base_root), f'Data Path Not Found "{base_root}"'
-    return base_root
+
+    loc_statcast = base_root + '_statcast/'
+    if not os.path.exists(loc_statcast):
+        loc_statcast = base_root + 'statcast/'
+        assert os.path.exists(loc_statcast), f'Statcast Path Not Found "{loc_statcast}"'
+        print(f'Using public statcast location {loc_statcast}')
+    else:
+        print(f'Using private statcast location {loc_statcast}')
+    return base_root, loc_statcast
+
 class BaseballETL:
+    """
+    ETL class for pitch level data. Drops unnecessary columns, converts to categorical and float16 where appropriate.
+    Groups data by month and year and saves to Parquet files.
+    Helper functions to automatically process entire seasons.
+    """
+
     def __init__(self, replace=False):
-        data_root = get_data_root()
-        self.loc_statcast = data_root + 'statcast/'
-        assert os.path.exists(self.loc_statcast), f'Invalid Path "{self.loc_statcast}"'
+        self.data_root, self.loc_statcast = get_data_root()
 
         self.replace = replace
         self.end_dt = None
         self.start_dt = None
         self.grab_current_season = False
 
-        self.loc_umpires = data_root + 'umpires/umpires.csv' # from https://www.retrosheet.org/
+        self.loc_umpires = self.data_root + 'umpires/umpires.csv'  # from https://www.retrosheet.org/
         self.statcast_cols_want = ['pitch_type', 'description', 'stand', 'p_throws', 'home_team', 'away_team', 'type',
                                    'balls', 'strikes', 'plate_x', 'plate_z', 'outs_when_up', 'inning', 'inning_topbot',
                                    'game_pk', 'game_date',
@@ -223,6 +235,10 @@ class BaseballETL:
 
 
 class DataLoader(BaseballETL):
+    """
+    Subclass of BaseballETL for importing data into memory. Includes helper functions to add history markers
+    extract + process columns for fitting specific models.
+    """
     def __init__(self):
         super().__init__()
         self.data = None

@@ -85,6 +85,10 @@ acceptable_ranges = {'Left_Wall': (-1.2,0.7),
 
 
 def check_coef(labeled_coef,verbose):
+    """
+    Check if fit coeffiecients are within acceptable ranges. Helpful when fitting many models and want to
+    maintain some quality control.
+    """
     did_pass = True
     for nam,value in labeled_coef.items():
         nam_st = nam.split(' ')[0]

@@ -13,6 +13,9 @@ import pandas as pd
 SECRET_ROOT = '../../SECRETS/'
 
 class EmailHandler:
+    """
+    Handles sending emails using the Gmail API
+    """
     def __init__(self):
         SCOPES = ["https://www.googleapis.com/auth/gmail.compose"]
 
@@ -68,6 +71,9 @@ class EmailHandler:
         self.service.users().messages().send(userId='me', body={'raw': self.encoded_email}).execute()
 
 class SQLHandler:
+    """
+    Handles writing and reading from a SQL database
+    """
     def __init__(self):
         key_loc = SECRET_ROOT + 'SQL_token.json'
         # otherwise will be held in secrets manager

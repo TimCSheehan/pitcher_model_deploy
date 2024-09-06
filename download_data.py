@@ -247,6 +247,7 @@ class DataLoader(BaseballETL):
         if not fn:
             fn = self.loc_statcast + season + '*' + '.parquet'
         fls = glob(fn)
+        if len(fls)==0: raise ValueError('No files found!')
         D = []
         for fl in fls:
             _d = pd.read_parquet(fl)

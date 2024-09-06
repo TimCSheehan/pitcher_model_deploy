@@ -70,6 +70,8 @@ dict_params = {'walls_single': ['Left_Wall', 'Right_Wall', 'Bottom_Wall', 'Top_W
 
 # TODO: don't like how sz takes list of rows and logistic model takes columns of data. They should look similar
 
+class InvalidInputError(Exception):"""Inputs provided to initialize model are invalid"""
+
 class ProbStrike:
     """
     Defines a model for predicting the probability of a strike given a pitch location.
@@ -79,7 +81,10 @@ class ProbStrike:
 
     def __init__(self, model_type='strike_zone', params=None, n_sd=4, param_names=None,
                  mod_wall_relu=None, sz_bt=False, batter_lr=False):
-
+        """ Initialize model for predicting strike probability. """
+        if not isinstance(params, (list,np.ndarray, tuple)): raise InvalidInputError('Params must be a list or array')
+        if not all([isinstance(p, (int, float, np.integer)) for p in params]): raise InvalidInputError('Params must be numeric')
+        
         self.model_type = model_type  # {strike zone, history, more...}
         self.params = params
         self.link_sd = softplus
@@ -103,6 +108,11 @@ class ProbStrike:
             if self.mod_wall_relu:
                 self.parameter_names += add_relu_params
             self.loss_fun = self.lik_sz_joint
+
+            total_expected_n_params = (self.n_wall + self.n_sd + 1*self.mod_wall_relu)
+            if len(self.params_sz) != total_expected_n_params: raise InvalidInputError('Incorrect # of params for given model')
+            # assert len(self.params_sz) == total_expected_n_params, 'invalid setup!'
+
         elif self.model_type == 'logistic':
             self.n_sd = 0
             self.W = params
@@ -120,9 +130,10 @@ class ProbStrike:
             self.parameter_names = (dict_params[wall_use] + dict_params[f'sd_{self.n_sd}'] +
                                     add_relu_params + param_names)
         else:
-            raise ValueError('Not a valid model')
+            raise InvalidInputError('Not a valid model')
 
-        if param_names and (self.W is not None): assert len(param_names) == len(self.W), 'invalid param names'
+        if param_names and (self.W is not None):
+            if len(param_names) != len(self.W): raise InvalidInputError('invalid param names')
         self.bits_gained_model = None
 
     def strike_zone_sd(self, X, wall_prob=False):
